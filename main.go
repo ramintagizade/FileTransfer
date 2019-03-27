@@ -1,9 +1,9 @@
 package main
 
 import (
-	"./server"
 	"flag"
 	"fmt"
+	"github.com/ramintagizade/FileTransfer/server"
 )
 
 func main() {
