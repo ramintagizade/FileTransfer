@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 var ZipFileName = "files.zip"
@@ -35,7 +36,17 @@ func ProcessFile(w http.ResponseWriter, r *http.Request, FilePath string) {
 		http.Error(w, "File not found . ", 404)
 	}
 	defer File.Close()
-	http.ServeFile(w, r, FilePath)
+	FileHeader := make([]byte, 512)
+	File.Read(FileHeader)
+	FileType := http.DetectContentType(FileHeader)
+	FileStat, _ := File.Stat()
+	FileSize := strconv.FormatInt(FileStat.Size(), 10)
+	w.Header().Set("Content-Disposition", "attachment; filename="+FilePath)
+	w.Header().Set("Content-Type", FileType)
+	w.Header().Set("Content-Length", FileSize)
+	File.Seek(0, 0)
+	io.Copy(w, File)
+	return
 }
 
 func ProcessDirectory(w http.ResponseWriter, r *http.Request, FilePath string) {
@@ -61,7 +72,7 @@ func ProcessDirectory(w http.ResponseWriter, r *http.Request, FilePath string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	ProcessFile(w, r, output)
+	http.ServeFile(w, r, output)
 }
 
 func ZipFiles(filename string, files []string) error {
