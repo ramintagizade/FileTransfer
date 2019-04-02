@@ -3,7 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/ramintagizade/FileTransfer/server"
+	//"github.com/ramintagizade/FileTransfer/server"
+	"./server"
 )
 
 func main() {
