@@ -1,9 +1,9 @@
 package server
 
 import (
-	. "../file"
-	. "../utils"
 	"fmt"
+	"github.com/ramintagizade/FileTransfer/file"
+	"github.com/ramintagizade/FileTransfer/utils"
 	"net/http"
 	"strings"
 )
@@ -12,7 +12,7 @@ var mapFile = make(map[string]string)
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	FileName := mapFile[strings.Replace(r.URL.Path, "/", "", -1)]
-	fi, err := GetFileInfo(FileName)
+	fi, err := file.GetFileInfo(FileName)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -20,17 +20,17 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	switch fi {
 	case "file":
-		ProcessFile(w, r, FileName)
+		file.ProcessFile(w, r, FileName)
 	case "directory":
-		ProcessDirectory(w, r, FileName)
+		file.ProcessDirectory(w, r, FileName)
 	}
 
-	RemoveZippedFile(ZipFileName)
+	file.RemoveZippedFile(file.ZipFileName)
 	return
 }
 
 func Run(filepath string) {
-	pkgLink := RandomString(5)
+	pkgLink := utils.RandomString(5)
 	mapFile[pkgLink] = filepath
 	ipAddress := GetAddress()
 	port := ":8000"
