@@ -33,9 +33,9 @@ func Run(filepath string) {
 	pkgLink := utils.RandomString(5)
 	mapFile[pkgLink] = filepath
 	ipAddress := GetAddress()
-	port := ":8000"
+	port := "8000"
 	downloadLink := "http://" + ipAddress + ":" + port + "/" + pkgLink
 	fmt.Println("download link: ", downloadLink)
 	http.HandleFunc("/"+pkgLink, Handler)
-	http.ListenAndServe(port, nil)
+	http.ListenAndServe(":"+port, nil)
 }
