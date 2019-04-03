@@ -30,7 +30,6 @@ func GetFileInfo(FilePath string) (string, error) {
 }
 
 func ProcessFile(w http.ResponseWriter, r *http.Request, FilePath string) {
-	fmt.Println("Processing file .. ", FilePath)
 	File, err := os.Open(FilePath)
 	if err != nil {
 		http.Error(w, "File not found . ", 404)
